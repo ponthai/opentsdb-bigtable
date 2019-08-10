@@ -29,11 +29,13 @@ RUN git clone https://github.com/OpenTSDB/opentsdb.git && \
     sh build-bigtable.sh install
 
 RUN apt-get install -y maven && \
-    git clone -b remove-log4j-dep https://github.com/OpenTSDB/opentsdb-rpc-kafka.git /opt/opentsdb-rpc-kafka && \
+    git clone https://github.com/ponthai/opentsdb-rpc-kafka.git /opt/opentsdb-rpc-kafka && \
     cd /opt/opentsdb-rpc-kafka && \
     mvn package -Pshaded && \
     mkdir -p /opt/opentsdb/plugin && \
     cp -r target/*.jar /opt/opentsdb/plugin
+
+RUN rm /usr/local/share/opentsdb/lib/log4j-over-slf4j-1.7.7.jar
 
 COPY hbase-site.xml /hbase-1.2.1/conf
 COPY config/opentsdb.conf /opt/opentsdb/
