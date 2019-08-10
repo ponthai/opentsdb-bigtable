@@ -20,12 +20,22 @@ test ! -f /opt/opentsdb/opentsdb.conf && echo "Missing opentsdb.conf" && exit 1
 PROJECTID=$(grep google.bigtable.project.id /opt/opentsdb/opentsdb.conf | awk '{print $3}')
 INSTANCEID=$(grep google.bigtable.instance.id /opt/opentsdb/opentsdb.conf | awk '{print $3}')
 
+# custom parameter
+PROJECT_ID=${PROJECT_ID}
+INSTANCE_ID=${INSTANCE_ID}
+ZONE_ID=${ZONE_ID}
+KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_CONNECT}
+CONSUMER_NAME=${CONSUMER_NAME}
+SYNC_TOPIC=${SYNC_TOPIC}
+
+sed -i "s/PROJECT_ID/$PROJECT_ID/;s/INSTANCE_ID/$INSTANCE_ID/;s/ZONE_ID/$ZONE_ID/;s/KAFKA_ZOOKEEPER_CONNECT/$KAFKA_ZOOKEEPER_CONNECT/;s/CONSUMER_NAME/$CONSUMER_NAME/;s/SYNC_TOPIC/$SYNC_TOPIC/" /opt/opentsdb/opentsdb.conf
+
+
 export HBASE_HOME=/hbase-1.2.1
 export PATH=$PATH:$HBASE_HOME/bin
 export OPENTSDB=/opentsdb
 
-sed -i "s/INSTANCEID/$INSTANCEID/;s/PROJECTID/$PROJECTID/" $HBASE_HOME/conf/hbase-site.xml 
-
+sed -i "s/INSTANCEID/$INSTANCEID/;s/PROJECTID/$PROJECTID/" $HBASE_HOME/conf/hbase-site.xml
 
 init() {
     env COMPRESSION=NONE $OPENTSDB/src/create_table.sh

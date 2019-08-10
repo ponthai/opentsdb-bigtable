@@ -28,7 +28,15 @@ RUN git clone https://github.com/OpenTSDB/opentsdb.git && \
     cd opentsdb && \
     sh build-bigtable.sh install
 
+RUN apt-get install -y maven && \
+    git clone https://github.com/OpenTSDB/opentsdb-rpc-kafka.git /opt/opentsdb-rpc-kafka && \
+    cd /opt/opentsdb-rpc-kafka && \
+    mvn package -Pshaded && \
+    mkdir -p /opt/opentsdb/plugin && \
+    cp -r target/*.jar /opt/opentsdb/plugin
+
 COPY hbase-site.xml /hbase-1.2.1/conf
+COPY config/opentsdb.conf /opt/opentsdb/
 
 COPY docker-entrypoint.sh /
 
