@@ -29,7 +29,7 @@ RUN git clone https://github.com/OpenTSDB/opentsdb.git && \
     sh build-bigtable.sh install
 
 RUN apt-get install -y maven && \
-    git clone https://github.com/OpenTSDB/opentsdb-rpc-kafka.git /opt/opentsdb-rpc-kafka && \
+    git clone -b remove-log4j-dep https://github.com/OpenTSDB/opentsdb-rpc-kafka.git /opt/opentsdb-rpc-kafka && \
     cd /opt/opentsdb-rpc-kafka && \
     mvn package -Pshaded && \
     mkdir -p /opt/opentsdb/plugin && \
